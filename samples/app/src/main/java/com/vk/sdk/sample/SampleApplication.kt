@@ -22,18 +22,21 @@
  * SOFTWARE.
  ******************************************************************************/
 
-subprojects { Project subproject ->
-    buildscript {
-        repositories {
-            jcenter()
-            google()
-            maven { url 'https://maven.fabric.io/public' }
+package com.vk.sdk.sample
+
+import android.app.Application
+import com.vk.api.sdk.VK
+import com.vk.api.sdk.VKTokenExpiredHandler
+
+class SampleApplication: Application() {
+    override fun onCreate() {
+        super.onCreate()
+        VK.addTokenExpiredHandler(tokenTracker)
+    }
+
+    private val tokenTracker = object: VKTokenExpiredHandler {
+        override fun onTokenExpired() {
+            WelcomeActivity.startFrom(this@SampleApplication)
         }
     }
-
-    repositories {
-        google()
-        jcenter()
-    }
 }
-

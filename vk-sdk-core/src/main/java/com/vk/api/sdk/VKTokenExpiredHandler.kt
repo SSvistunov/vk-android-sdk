@@ -22,18 +22,12 @@
  * SOFTWARE.
  ******************************************************************************/
 
-subprojects { Project subproject ->
-    buildscript {
-        repositories {
-            jcenter()
-            google()
-            maven { url 'https://maven.fabric.io/public' }
-        }
-    }
+package com.vk.api.sdk
 
-    repositories {
-        google()
-        jcenter()
-    }
+
+/**
+ * Callback for handling token expiration
+ */
+interface VKTokenExpiredHandler {
+    fun onTokenExpired()
 }
-

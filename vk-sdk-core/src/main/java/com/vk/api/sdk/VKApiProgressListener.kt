@@ -20,20 +20,20 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
- ******************************************************************************/
+ */
 
-subprojects { Project subproject ->
-    buildscript {
-        repositories {
-            jcenter()
-            google()
-            maven { url 'https://maven.fabric.io/public' }
+package com.vk.api.sdk
+
+/**
+ * Callback for handling progress of loading
+ */
+interface VKApiProgressListener {
+
+    fun onProgress(progressValue: Int, progressMaxValue: Int)
+
+    companion object {
+        val EMPTY: VKApiProgressListener = object : VKApiProgressListener {
+            override fun onProgress(progressValue: Int, progressMaxValue: Int) {}
         }
     }
-
-    repositories {
-        google()
-        jcenter()
-    }
 }
-

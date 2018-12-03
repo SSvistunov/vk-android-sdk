@@ -22,18 +22,22 @@
  * SOFTWARE.
  ******************************************************************************/
 
-subprojects { Project subproject ->
-    buildscript {
-        repositories {
-            jcenter()
-            google()
-            maven { url 'https://maven.fabric.io/public' }
+package com.vk.api.sdk.chain
+
+import com.vk.api.sdk.VKApiManager
+import com.vk.api.sdk.exceptions.VKApiExecutionException
+
+class InvalidCredentialsObserverChainCall<T>(manager: VKApiManager, val chain: ChainCall<T>) :
+        ChainCall<T>(manager) {
+    @Throws(Exception::class)
+    override fun call(args: ChainArgs): T? {
+        try {
+            return chain.call(args)
+        } catch (ex: VKApiExecutionException) {
+            if (ex.isInvalidCredentialsError) {
+                manager.illegalCredentialsListener?.onInvalidCredentials(ex.apiMethod, ex.userBanInfo)
+            }
+            throw ex
         }
     }
-
-    repositories {
-        google()
-        jcenter()
-    }
 }
-

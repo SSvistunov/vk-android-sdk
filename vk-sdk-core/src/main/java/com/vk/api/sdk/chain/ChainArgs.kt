@@ -22,18 +22,12 @@
  * SOFTWARE.
  ******************************************************************************/
 
-subprojects { Project subproject ->
-    buildscript {
-        repositories {
-            jcenter()
-            google()
-            maven { url 'https://maven.fabric.io/public' }
-        }
-    }
+package com.vk.api.sdk.chain
 
-    repositories {
-        google()
-        jcenter()
-    }
+class ChainArgs {
+    var captchaSid = ""
+    var captchaKey = ""
+    var userConfirmed = false
+
+    fun hasCaptcha() = captchaSid.isNotEmpty() && captchaKey.isNotEmpty()
 }
-

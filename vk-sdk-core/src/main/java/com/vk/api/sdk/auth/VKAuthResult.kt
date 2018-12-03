@@ -22,18 +22,13 @@
  * SOFTWARE.
  ******************************************************************************/
 
-subprojects { Project subproject ->
-    buildscript {
-        repositories {
-            jcenter()
-            google()
-            maven { url 'https://maven.fabric.io/public' }
-        }
-    }
+package com.vk.api.sdk.auth
 
-    repositories {
-        google()
-        jcenter()
-    }
+class VKAuthResult @JvmOverloads constructor(val accessToken: VKAccessToken?, val errorCode: Int = 0) {
+
+    val isSuccess: Boolean
+        get() = !isError
+
+    val isError: Boolean
+        get() = errorCode != 0
 }
-

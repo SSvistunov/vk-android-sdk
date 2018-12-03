@@ -22,18 +22,37 @@
  * SOFTWARE.
  ******************************************************************************/
 
-subprojects { Project subproject ->
-    buildscript {
-        repositories {
-            jcenter()
-            google()
-            maven { url 'https://maven.fabric.io/public' }
+package com.vk.api.sdk
+
+import java.util.concurrent.CountDownLatch
+
+/**
+ * Handler for api errors
+ */
+interface VKApiValidationHandler {
+    /**
+     * This method will called, when user should enter captcha text
+     */
+    fun handleCaptcha(img: String, cb: Callback<String>)
+    /**
+     * This method will called, when auth validation required
+     */
+    fun handleValidation(validationUrl: String, cb: Callback<Credentials>)
+    /**
+     * This method will called, when confirmation from user required
+     */
+    fun handleConfirm(confirmationText: String, cb: Callback<Boolean>)
+
+    class Callback<T>(private val latch: CountDownLatch) {
+        @Volatile var value: T? = null
+
+        fun cancel() = latch.countDown()
+        fun submit(value: T) {
+            this.value = value
+            latch.countDown()
         }
     }
-
-    repositories {
-        google()
-        jcenter()
+    class Credentials(val secret: String?, val token: String?, val uid: Int?) {
+        val isValid = !(token.isNullOrBlank() || secret.isNullOrEmpty())
     }
 }
-

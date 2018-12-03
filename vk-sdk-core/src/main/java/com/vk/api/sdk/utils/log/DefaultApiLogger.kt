@@ -22,18 +22,25 @@
  * SOFTWARE.
  ******************************************************************************/
 
-subprojects { Project subproject ->
-    buildscript {
-        repositories {
-            jcenter()
-            google()
-            maven { url 'https://maven.fabric.io/public' }
+package com.vk.api.sdk.utils.log
+
+import android.util.Log
+
+open class DefaultApiLogger(override var logLevel: Logger.LogLevel,
+                            override val tag: String) : Logger {
+    override fun log(level: Logger.LogLevel, msg: String?, err: Throwable?) {
+        if (checkLevel(level)) return
+
+        when (level) {
+            Logger.LogLevel.NONE -> {}
+            Logger.LogLevel.VERBOSE -> Log.v(tag, msg, err)
+            Logger.LogLevel.DEBUG -> Log.d(tag, msg, err)
+            Logger.LogLevel.WARNING -> Log.w(tag, msg, err)
+            Logger.LogLevel.ERROR -> Log.e(tag, msg, err)
         }
     }
 
-    repositories {
-        google()
-        jcenter()
+    private fun checkLevel(messageLevel: Logger.LogLevel): Boolean {
+        return logLevel.ordinal > messageLevel.ordinal
     }
 }
-

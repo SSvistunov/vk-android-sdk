@@ -22,18 +22,26 @@
  * SOFTWARE.
  ******************************************************************************/
 
-subprojects { Project subproject ->
-    buildscript {
-        repositories {
-            jcenter()
-            google()
-            maven { url 'https://maven.fabric.io/public' }
-        }
-    }
+package com.vk.api.sdk.auth
 
-    repositories {
-        google()
-        jcenter()
-    }
+enum class VKScope {
+    NOTIFY,
+    FRIENDS,
+    PHOTOS,
+    AUDIO,
+    VIDEO,
+    STORIES,
+    PAGES,
+    STATUS,
+    NOTES,
+    MESSAGES,
+    WALL,
+    ADS,
+    OFFLINE,
+    DOCS,
+    GROUPS,
+    NOTIFICATIONS,
+    STATS,
+    EMAIL,
+    MARKET
 }
-

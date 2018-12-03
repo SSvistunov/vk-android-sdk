@@ -22,18 +22,15 @@
  * SOFTWARE.
  ******************************************************************************/
 
-subprojects { Project subproject ->
-    buildscript {
-        repositories {
-            jcenter()
-            google()
-            maven { url 'https://maven.fabric.io/public' }
-        }
-    }
+package com.vk.api.sdk.chain
 
-    repositories {
-        google()
-        jcenter()
-    }
+import com.vk.api.sdk.VKApiManager
+import com.vk.api.sdk.utils.log.Logger
+
+abstract class ChainCall<out T>(val manager: VKApiManager) {
+    @Throws(Exception::class)
+    abstract fun call(args: ChainArgs): T?
+
+    protected fun logDebug(msg: String, t: Throwable) = manager.config.logger.log(Logger.LogLevel.DEBUG, msg, t)
+    protected fun logWarning(msg: String, t: Throwable) = manager.config.logger.log(Logger.LogLevel.WARNING, msg, t)
 }
-

@@ -22,18 +22,13 @@
  * SOFTWARE.
  ******************************************************************************/
 
-subprojects { Project subproject ->
-    buildscript {
-        repositories {
-            jcenter()
-            google()
-            maven { url 'https://maven.fabric.io/public' }
-        }
-    }
+package com.vk.api.sdk.requests
 
-    repositories {
-        google()
-        jcenter()
-    }
+import org.json.JSONObject
+
+/**
+ * If you don't need any response you can use this class
+ */
+class VKBooleanRequest(method: String): VKRequest<Boolean>(method) {
+    override fun parse(r: JSONObject) = true
 }
-

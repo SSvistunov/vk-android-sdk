@@ -21,19 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
+package com.vk.api.sdk.okhttp
 
-subprojects { Project subproject ->
-    buildscript {
-        repositories {
-            jcenter()
-            google()
-            maven { url 'https://maven.fabric.io/public' }
-        }
-    }
+data class RequestTag
+@JvmOverloads
+constructor(val uid: Int? = null,
+            val awaitNetwork: Boolean? = null,
+            val reason: String? = null,
+            val retryCount: Int? = null) {
 
-    repositories {
-        google()
-        jcenter()
+    fun toMap(): Map<String, Any?>? {
+        return mutableMapOf(
+                "UID" to uid,
+                "AWAIT_NETWORK" to awaitNetwork,
+                "REASON" to reason,
+                "RETRY_COUNT" to retryCount)
     }
 }
-

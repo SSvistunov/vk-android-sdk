@@ -22,18 +22,30 @@
  * SOFTWARE.
  ******************************************************************************/
 
-subprojects { Project subproject ->
-    buildscript {
-        repositories {
-            jcenter()
-            google()
-            maven { url 'https://maven.fabric.io/public' }
-        }
+package com.vk.api.sdk.internal
+
+import com.vk.api.sdk.VKApiManager
+import com.vk.api.sdk.exceptions.VKApiException
+
+import java.io.IOException
+
+/**
+ * Base class for making vk api requests
+ * Use sdk sample as an example
+ * If you need more easy way, use VKRequest
+ */
+abstract class ApiCommand<Response> {
+
+    @Throws(InterruptedException::class, IOException::class, VKApiException::class)
+    fun execute(manager: VKApiManager): Response {
+        return onExecute(manager)
     }
 
-    repositories {
-        google()
-        jcenter()
+    @Throws(InterruptedException::class, IOException::class, VKApiException::class)
+    protected abstract fun onExecute(manager: VKApiManager): Response
+
+    companion object {
+        const val RETRY_INFINITE = Integer.MAX_VALUE
     }
+
 }
-

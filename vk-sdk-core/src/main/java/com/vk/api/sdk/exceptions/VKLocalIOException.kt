@@ -22,18 +22,12 @@
  * SOFTWARE.
  ******************************************************************************/
 
-subprojects { Project subproject ->
-    buildscript {
-        repositories {
-            jcenter()
-            google()
-            maven { url 'https://maven.fabric.io/public' }
-        }
-    }
+package com.vk.api.sdk.exceptions
 
-    repositories {
-        google()
-        jcenter()
+import java.io.IOException
+
+class VKLocalIOException(throwable: Throwable) : IOException(throwable) {
+    companion object {
+        internal const val serialVersionUID = 3940183432046758205L
     }
 }
-

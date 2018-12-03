@@ -22,18 +22,43 @@
  * SOFTWARE.
  ******************************************************************************/
 
-subprojects { Project subproject ->
-    buildscript {
-        repositories {
-            jcenter()
-            google()
-            maven { url 'https://maven.fabric.io/public' }
+package com.vk.api.sdk
+
+import okhttp3.OkHttpClient
+import java.util.concurrent.TimeUnit
+
+/**
+ * Wrapper for okhttp
+ */
+abstract class VKOkHttpProvider {
+    interface BuilderUpdateFunction {
+        fun update(builder: OkHttpClient.Builder): OkHttpClient.Builder
+    }
+
+    abstract fun getClient(): OkHttpClient
+    abstract fun updateClient(f: BuilderUpdateFunction)
+
+    class DefaultProvider : VKOkHttpProvider() {
+        @Volatile
+        private var okHttpClient: OkHttpClient? = null
+
+        override fun getClient(): OkHttpClient {
+            if (okHttpClient == null) {
+                okHttpClient = OkHttpClient().newBuilder()
+                        .connectTimeout(20, TimeUnit.SECONDS)
+                        .readTimeout(30, TimeUnit.SECONDS)
+                        .writeTimeout(20, TimeUnit.SECONDS)
+                        .followRedirects(true)
+                        .followSslRedirects(true)
+                        .build()
+            }
+            return okHttpClient!!
+        }
+
+        override fun updateClient(f: VKOkHttpProvider.BuilderUpdateFunction) {
+            if (okHttpClient != null) {
+                okHttpClient = f.update(okHttpClient!!.newBuilder()).build()
+            }
         }
     }
-
-    repositories {
-        google()
-        jcenter()
-    }
 }
-

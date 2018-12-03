@@ -22,18 +22,15 @@
  * SOFTWARE.
  ******************************************************************************/
 
-subprojects { Project subproject ->
-    buildscript {
-        repositories {
-            jcenter()
-            google()
-            maven { url 'https://maven.fabric.io/public' }
-        }
-    }
+package com.vk.api.sdk
 
-    repositories {
-        google()
-        jcenter()
-    }
+import com.vk.api.sdk.exceptions.VKApiExecutionException
+
+/**
+ * Callback for vk api requests
+ * Get response here from VK.execute
+ */
+interface VKApiCallback<in T> {
+    fun success(result: T)
+    fun fail(error: VKApiExecutionException)
 }
-

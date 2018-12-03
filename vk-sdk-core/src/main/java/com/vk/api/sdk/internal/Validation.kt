@@ -22,18 +22,29 @@
  * SOFTWARE.
  ******************************************************************************/
 
-subprojects { Project subproject ->
-    buildscript {
-        repositories {
-            jcenter()
-            google()
-            maven { url 'https://maven.fabric.io/public' }
-        }
+package com.vk.api.sdk.internal
+
+import android.content.Context
+import android.text.TextUtils
+
+object Validation {
+    fun assertContextValid(context: Context?) {
+        if (context == null) throw IllegalArgumentException("context is null")
     }
 
-    repositories {
-        google()
-        jcenter()
+    fun assertCallsPerSecondLimitValid(limit: Int) {
+        if (limit <= 0) throw IllegalArgumentException("Illegal callsPerSecondLimit value: $limit")
+    }
+
+    fun assertHttpHostValid(host: String?) {
+        if (host == null || host.length == 0) throw IllegalArgumentException("Illegal host value: " + host!!)
+    }
+
+    fun assertLangValid(lang: String?) {
+        if (TextUtils.isEmpty(lang)) throw IllegalArgumentException("Illegal lang value: " + lang!!)
+    }
+
+    fun assertAccessTokenValid(accessToken: String?) {
+        if (accessToken == null) throw IllegalArgumentException("Illegal accessToken value")
     }
 }
-

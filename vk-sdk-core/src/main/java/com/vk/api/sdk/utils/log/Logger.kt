@@ -22,18 +22,18 @@
  * SOFTWARE.
  ******************************************************************************/
 
-subprojects { Project subproject ->
-    buildscript {
-        repositories {
-            jcenter()
-            google()
-            maven { url 'https://maven.fabric.io/public' }
-        }
+package com.vk.api.sdk.utils.log
+
+interface Logger {
+    enum class LogLevel {
+        VERBOSE,
+        DEBUG,
+        WARNING,
+        ERROR,
+        NONE
     }
 
-    repositories {
-        google()
-        jcenter()
-    }
+    val logLevel: LogLevel
+    val tag: String
+    fun log(level: LogLevel, msg: String? = null, err: Throwable? = null)
 }
-

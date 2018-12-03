@@ -22,18 +22,13 @@
  * SOFTWARE.
  ******************************************************************************/
 
-subprojects { Project subproject ->
-    buildscript {
-        repositories {
-            jcenter()
-            google()
-            maven { url 'https://maven.fabric.io/public' }
-        }
-    }
+package com.vk.api.sdk;
 
-    repositories {
-        google()
-        jcenter()
-    }
+import com.vk.api.sdk.exceptions.VKApiException;
+
+/**
+ * This class parses api response from json string
+ */
+public interface VKApiResponseParser<Result> {
+    Result parse(String response) throws VKApiException;
 }
-

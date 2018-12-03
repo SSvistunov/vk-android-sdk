@@ -22,18 +22,31 @@
  * SOFTWARE.
  ******************************************************************************/
 
-subprojects { Project subproject ->
-    buildscript {
-        repositories {
-            jcenter()
-            google()
-            maven { url 'https://maven.fabric.io/public' }
+package com.vk.api.sdk.utils
+
+import kotlin.reflect.KProperty
+
+/**
+ * Provides operator function for declaring ThreadLocal var throght kotlin delegate syntax.
+ */
+internal interface ThreadLocalDelegate<T> {
+    fun get(): T
+}
+
+internal fun <T> threadLocal(factory: () -> T): ThreadLocalDelegate<T> {
+    return ThreadLocalDelegateImpl(factory)
+}
+
+internal class ThreadLocalDelegateImpl<T>(val factory: () -> T) : ThreadLocalDelegate<T> {
+    private val value: ThreadLocal<T> = object : ThreadLocal<T>() {
+        override fun initialValue(): T {
+            return factory.invoke()
         }
     }
 
-    repositories {
-        google()
-        jcenter()
+    override fun get(): T {
+        return value.get()
     }
 }
 
+internal operator fun <T> ThreadLocalDelegate<T>.getValue(any: Any?, property: KProperty<*>): T = this.get()

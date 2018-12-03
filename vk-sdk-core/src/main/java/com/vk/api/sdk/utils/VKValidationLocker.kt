@@ -21,19 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
+package com.vk.api.sdk.utils
 
-subprojects { Project subproject ->
-    buildscript {
-        repositories {
-            jcenter()
-            google()
-            maven { url 'https://maven.fabric.io/public' }
+import java.util.concurrent.locks.Condition
+import java.util.concurrent.locks.ReentrantLock
+import kotlin.concurrent.withLock
+
+/**
+ * This object lock network thread
+ * for waiting user validation response
+ */
+internal object VKValidationLocker {
+    private val locker = ReentrantLock()
+    private val lockCondition: Condition = locker.newCondition()
+
+    fun await() {
+        try {
+            locker.withLock {
+                lockCondition.await()
+            }
+        } catch (ignored: InterruptedException) {
         }
     }
 
-    repositories {
-        google()
-        jcenter()
+    fun signal() {
+        locker.withLock {
+            lockCondition.signalAll()
+        }
     }
 }
-

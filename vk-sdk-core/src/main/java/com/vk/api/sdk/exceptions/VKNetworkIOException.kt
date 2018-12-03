@@ -22,18 +22,39 @@
  * SOFTWARE.
  ******************************************************************************/
 
-subprojects { Project subproject ->
-    buildscript {
-        repositories {
-            jcenter()
-            google()
-            maven { url 'https://maven.fabric.io/public' }
-        }
+package com.vk.api.sdk.exceptions
+
+import java.io.IOException
+import java.io.InterruptedIOException
+import java.net.SocketException
+import java.net.UnknownHostException
+
+open class VKNetworkIOException
+    @JvmOverloads
+    constructor(detailMessage: String = "",
+                throwable: Throwable? = null) : IOException(detailMessage, throwable) {
+
+    constructor(throwable: Throwable?) : this("", throwable)
+
+    companion object {
+        internal const val serialVersionUID = -2758493010294573829L
     }
 
-    repositories {
-        google()
-        jcenter()
+    /**
+     * Signals that request failed because there were some network problems
+     * like network was totally unavailable or socket disconnected or degraded.
+     */
+    private fun isNetworkUnavailableCause() = cause is UnknownHostException || cause is SocketException
+
+    /**
+     * Signals that an I/O operation has been interrupted.
+     */
+    private fun isRequestInterruptedCause() = cause is InterruptedIOException || cause is InterruptedException
+
+    override fun toString(): String {
+        return "NetworkIO(noNetwork=${isNetworkUnavailableCause().toInt()}," +
+                "interrupted=${isRequestInterruptedCause().toInt()},${cause?.toString()})"
     }
+
+    private fun Boolean.toInt() = if (this) 1 else 0
 }
-

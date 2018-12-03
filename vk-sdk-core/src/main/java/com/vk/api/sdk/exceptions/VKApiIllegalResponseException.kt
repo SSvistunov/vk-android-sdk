@@ -22,18 +22,17 @@
  * SOFTWARE.
  ******************************************************************************/
 
-subprojects { Project subproject ->
-    buildscript {
-        repositories {
-            jcenter()
-            google()
-            maven { url 'https://maven.fabric.io/public' }
-        }
-    }
+package com.vk.api.sdk.exceptions
 
-    repositories {
-        google()
-        jcenter()
+class VKApiIllegalResponseException : VKApiException {
+
+    constructor(detailMessage: String) : super(detailMessage) {}
+
+    constructor(detailMessage: String, throwable: Throwable) : super(detailMessage, throwable) {}
+
+    constructor(throwable: Throwable) : super(throwable) {}
+
+    companion object {
+        internal const val serialVersionUID = 1632913732314330746L
     }
 }
-

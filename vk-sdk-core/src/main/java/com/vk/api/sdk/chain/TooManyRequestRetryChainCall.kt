@@ -22,18 +22,34 @@
  * SOFTWARE.
  ******************************************************************************/
 
-subprojects { Project subproject ->
-    buildscript {
-        repositories {
-            jcenter()
-            google()
-            maven { url 'https://maven.fabric.io/public' }
+package com.vk.api.sdk.chain
+
+import com.vk.api.sdk.VKApiManager
+import com.vk.api.sdk.exceptions.VKApiExecutionException
+
+internal class TooManyRequestRetryChainCall<T>(manager: VKApiManager, retryLimit: Int, val chain: ChainCall<T>) : RetryChainCall<T>(manager, retryLimit) {
+    @Throws(Exception::class)
+    override fun call(args: ChainArgs): T? {
+        var sleepByTooManyRequest = false
+        for (i in 0 until retryLimit) {
+            if (sleepByTooManyRequest) {
+                Thread.sleep(TIMEOUT)
+            }
+            try {
+                return chain.call(args)
+            } catch (ex: VKApiExecutionException) {
+                if (ex.isTooManyRequestsError) {
+                    logDebug("Too many requests", ex)
+                    sleepByTooManyRequest = true
+                } else {
+                    throw ex
+                }
+            }
         }
+        return null
     }
 
-    repositories {
-        google()
-        jcenter()
+    companion object {
+        private const val TIMEOUT: Long = 1100
     }
 }
-
